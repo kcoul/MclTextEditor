@@ -1256,8 +1256,10 @@ void mcl::TextEditor::mouseDown (const MouseEvent& e)
         menu.addItem (8, "Draw profiling info", true, drawProfilingInfo, nullptr);
         menu.addItem (9, "Debug tokens", true, DEBUG_TOKENS, nullptr);
 
-        switch (menu.show())
+        auto callback = [this] (int choice)
         {
+            switch (choice)
+            {
             case 1: renderScheme = RenderScheme::usingAttributedStringSingle; break;
             case 2: renderScheme = RenderScheme::usingAttributedString; break;
             case 3: renderScheme = RenderScheme::usingGlyphArrangement; break;
@@ -1266,13 +1268,16 @@ void mcl::TextEditor::mouseDown (const MouseEvent& e)
 #if MCL_ENABLE_OPEN_GL
             case 6: useOpenGLRendering = ! useOpenGLRendering; if (useOpenGLRendering) context.attachTo (*this); else context.detach(); break;
 #else
-			// You haven't enabled open GL
-			case 6: jassertfalse; break;
+                // You haven't enabled open GL
+            case 6: jassertfalse; break;
 #endif
             case 7: enableSyntaxHighlighting = ! enableSyntaxHighlighting; break;
             case 8: drawProfilingInfo = ! drawProfilingInfo; break;
             case 9: DEBUG_TOKENS = ! DEBUG_TOKENS; break;
-        }
+            }
+        };
+
+        menu.showMenuAsync(juce::PopupMenu::Options(), callback);
 
         resetProfilingData();
         repaint();

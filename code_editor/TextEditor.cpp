@@ -1414,6 +1414,10 @@ bool mcl::TextEditor::keyPressed (const KeyPress& key)
 
 
     // =======================================================================================
+	if (key.isKeyCode (KeyPress::backspaceKey)) {
+        return (expandBack(Target::character, Direction::backwardCol)
+                && insert(""));
+    }
     if (key.isKeyCode (KeyPress::escapeKey))
     {
         document.setSelections (document.getSelections().getLast());
